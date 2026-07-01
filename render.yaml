@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: shl-assignment
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: FAISS_NO_AVX2=1 uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GROK_API_KEY
+        sync: false
+      - key: FAISS_NO_AVX2
+        value: "1"
