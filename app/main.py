@@ -22,10 +22,20 @@ groq_client = Groq(api_key=os.environ.get("GROK_API_KEY"))
 # Initialize FastAPI app
 app = FastAPI(title="SHL Assessment Recommender", version="1.0.0")
 
+# CORS origins from env (comma-separated), fallback to localhost for dev
+cors_origins = os.environ.get("CORS_ORIGINS", "").split(",")
+if not cors_origins or cors_origins == [""]:
+    cors_origins = [
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:3000",
+    ]
+
 # Add CORS middleware for frontend integration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5173", "http://127.0.0.1:3000"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
